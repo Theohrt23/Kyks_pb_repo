@@ -76,14 +76,12 @@
     - name: Install Composer
       ansible.builtin.shell: "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"
       args:
-        creates: /usr/local/bin/composer
+      creates: /usr/local/bin/composer
 
     - name: Install Composer dependencies
-      ansible.builtin.command:
-        cmd: composer install -no-interaction --optimize-autoloader
-        chdir: /var/www/kyks/kyks
-      environment:
-        COMPOSER_ALLOW_SUPERUSER: 1
+      composer:
+        command: install
+        working_dir: /var/www/kyks/kyks
 
     - name: Configure Symfony parameters
       template:
