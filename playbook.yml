@@ -76,7 +76,7 @@
     - name: Install Composer
       ansible.builtin.shell: "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer"
       args:
-      creates: /usr/local/bin/composer
+        creates: /usr/local/bin/composer
 
     - name: Install Composer dependencies
       composer:
