@@ -80,8 +80,8 @@
 
     - name: Install Composer dependencies
       ansible.builtin.command:
-        command: install -no-interaction --optimize-autoloader
-        working_dir: /var/www/kyks
+        cmd: install -no-interaction --optimize-autoloader
+        chdir: /var/www/kyks
 
     - name: Configure Symfony parameters
       template:
