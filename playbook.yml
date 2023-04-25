@@ -85,7 +85,7 @@
 
     - name: Configure Symfony parameters
       template:
-        src: ./templates/gparameters.yaml.j2
+        src: ./templates/parameters.yaml.j2
         dest: /var/www/kyks/kyks/config/packages/parameters.yaml
 
     - name: Clear Symfony cache
