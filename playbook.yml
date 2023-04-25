@@ -81,7 +81,7 @@
     - name: Install Composer dependencies
       ansible.builtin.command:
         cmd: composer install -no-interaction --optimize-autoloader
-        chdir: /var/www/kyks
+        chdir: /var/www/kyks/kyks
 
     - name: Configure Symfony parameters
       template:
