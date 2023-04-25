@@ -13,15 +13,11 @@
       apt:
         upgrade: safe
 
-    - name: install apt utils
-      apt:
-        name: software-properties-common
-        update_cache: yes
-
     - name: Add Ondřej Surý PPA for PHP
       apt_repository:
         repo: 'ppa:ondrej/php'
         state: present
+        update_cache: no
 
     - name: Update apt cache
       apt:
