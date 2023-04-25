@@ -80,7 +80,6 @@
 
     - name: Install Composer dependencies
       composer:
-        command: install
         working_dir: /var/www/kyks/kyks
 
     - name: Configure Symfony parameters
