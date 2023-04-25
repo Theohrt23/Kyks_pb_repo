@@ -3,6 +3,11 @@
   become: true
 
   tasks:
+    - name: Add Ondřej Surý PPA for PHP
+      apt_repository:
+        repo: 'ppa:ondrej/php'
+        state: present
+
     - name: Install PHP and additional modules
       apt:
         name:
@@ -47,7 +52,7 @@
 
     - name: Configure Symfony parameters
       template:
-        src: ./templates/parameters.yaml.j2
+        src: ./templates/gparameters.yaml.j2
         dest: /var/www/your-project/config/packages/parameters.yaml
 
     - name: Clear Symfony cache
