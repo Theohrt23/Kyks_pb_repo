@@ -32,14 +32,14 @@
     - name: Install PHP and additional modules
       ansible.builtin.apt:
         name:
-          - php8.2
-          - php8.2-cli
-          - php8.2-fpm
-          - php8.2-common
-          - php8.2-json
-          - php8.2-mbstring
-          - php8.2-xml
-          - php8.2-zip
+          - php8.1
+          - php8.1-cli
+          - php8.1-fpm
+          - php8.1-common
+          - php8.1-json
+          - php8.1-mbstring
+          - php8.1-xml
+          - php8.1-zip
         state: present
 
     - name: Install Nginx
