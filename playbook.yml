@@ -3,6 +3,17 @@
   become: true
 
   tasks:
+    - name: Install required dependencies for the Sury repository
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
+
     - name: Get the Debian distribution codename
       ansible.builtin.shell: "lsb_release -sc"
       register: debian_codename
