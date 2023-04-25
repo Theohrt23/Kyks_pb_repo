@@ -78,14 +78,15 @@
       args:
         creates: /usr/local/bin/composer
 
-    - name: Install Composer dependencies
-      composer:
-        working_dir: /var/www/kyks/kyks
+    - name: Install Symfony dependencies with Composer
+      ansible.builtin.command:
+        cmd: composer install --no-interaction --optimize-autoloader
+        chdir: /var/www/kyks/kyks
 
     - name: Configure Symfony parameters
       template:
         src: ./templates/gparameters.yaml.j2
-        dest: /var/www/your-project/config/packages/parameters.yaml
+        dest: /var/www/kyks/kyks/config/packages/parameters.yaml
 
     - name: Clear Symfony cache
       shell: php bin/console cache:clear --env=prod
