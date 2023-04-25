@@ -9,6 +9,15 @@
         keyserver: keyserver.ubuntu.com
         id: "E5267A6C"
 
+    - name: Upgrade apt
+      apt:
+        upgrade: safe
+
+    - name: install apt utils
+      apt:
+        name: software-properties-common
+        update_cache: yes
+
     - name: Add Ondřej Surý PPA for PHP
       apt_repository:
         repo: 'ppa:ondrej/php'
@@ -16,7 +25,6 @@
 
     - name: Update apt cache
       apt:
-        upgrade: yes
         update_cache: yes
 
     - name: Install PHP and additional modules
