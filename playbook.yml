@@ -88,9 +88,6 @@
         src: ./templates/parameters.yaml.j2
         dest: /var/www/kyks/kyks/config/packages/parameters.yaml
 
-    - name: Clear Symfony cache
-      shell: php bin/console cache:clear --env=prod
-
   handlers:
     - name: restart nginx
       systemd:
