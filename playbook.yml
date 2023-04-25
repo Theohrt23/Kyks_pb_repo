@@ -3,34 +3,19 @@
   become: true
 
   tasks:
-    - name: Update apt keys
-      apt_key:
-        state: present
-        keyserver: keyserver.ubuntu.com
-        id: "E5267A6C"
+    - name: Get the Debian distribution codename
+      ansible.builtin.shell: "lsb_release -sc"
+      register: debian_codename
 
-    - name: Import APT key for Bullseye
-      apt_key:
-        url: "https://ftp-master.debian.org/keys/release-11.asc"
+    - name: Add the Sury GPG key
+      ansible.builtin.apt_key:
+        url: https://packages.sury.org/php/apt.gpg
         state: present
 
-    - name: Import APT key for Ondrej PHP
-      apt_key:
-        url: "https://packages.sury.org/php/apt.gpg"
+    - name: Add the Sury repository
+      ansible.builtin.apt_repository:
+        repo: "deb https://packages.sury.org/php/ {{ debian_codename.stdout }}
         state: present
-
-    - name: Upgrade apt
-      apt:
-        upgrade: safe
-
-    - name: Add Ondřej Surý PPA for PHP
-      apt_repository:
-        repo: 'ppa:ondrej/php'
-        state: present
-        update_cache: no
-
-    - name: Update apt cache
-      apt:
         update_cache: yes
 
     - name: Install PHP and additional modules
