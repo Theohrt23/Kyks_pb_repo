@@ -16,6 +16,7 @@
 
     - name: Update apt cache
       apt:
+        upgrade: yes
         update_cache: yes
 
     - name: Install PHP and additional modules
