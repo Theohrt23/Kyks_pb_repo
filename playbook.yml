@@ -3,10 +3,12 @@
   become: true
 
   tasks:
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-        
+    - name: Update apt keys
+      apt_key:
+        state: present
+        keyserver: keyserver.ubuntu.com
+        id: "E5267A6C"
+
     - name: Add Ondřej Surý PPA for PHP
       apt_repository:
         repo: 'ppa:ondrej/php'
@@ -15,14 +17,14 @@
     - name: Install PHP and additional modules
       apt:
         name:
-          - php8.0
-          - php8.0-cli
-          - php8.0-fpm
-          - php8.0-common
-          - php8.0-json
-          - php8.0-mbstring
-          - php8.0-xml
-          - php8.0-zip
+          - php8.2
+          - php8.2-cli
+          - php8.2-fpm
+          - php8.2-common
+          - php8.2-json
+          - php8.2-mbstring
+          - php8.2-xml
+          - php8.2-zip
         state: present
 
     - name: Install Nginx
