@@ -19,7 +19,7 @@
         update_cache: yes
 
     - name: Install PHP and additional modules
-      ansible-builtin-apt:
+      ansible.builtin.apt:
         name:
           - php8.2
           - php8.2-cli
