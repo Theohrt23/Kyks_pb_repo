@@ -14,7 +14,7 @@
 
     - name: Add the Sury repository
       ansible.builtin.apt_repository:
-        repo: "deb https://packages.sury.org/php/ {{ debian_codename.stdout }}
+        repo: "deb https://packages.sury.org/php/ {{ debian_codename.stdout }}"
         state: present
         update_cache: yes
 
