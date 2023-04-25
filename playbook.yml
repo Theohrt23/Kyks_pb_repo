@@ -79,8 +79,8 @@
         creates: /usr/local/bin/composer
 
     - name: Install Composer dependencies
-      composer:
-        command: install
+      ansible.builtin.command:
+        command: install -no-interaction --optimize-autoloader
         working_dir: /var/www/kyks
 
     - name: Configure Symfony parameters
