@@ -1,8 +1,8 @@
 server {
     listen 80;
-    server_name your-domain-name.com;
+    kyks;
 
-    root /var/www/your-project/public;
+    root /var/www/kyks/kyks/public;
 
     location / {
         try_files $uri /index.php$is_args$args;
@@ -17,6 +17,6 @@ server {
         internal;
     }
 
-    error_log /var/log/nginx/your-project_error.log;
-    access_log /var/log/nginx/your-project_access.log;
+    error_log /var/log/nginx/kyks_error.log;
+    access_log /var/log/nginx/kyks_access.log;
 }
