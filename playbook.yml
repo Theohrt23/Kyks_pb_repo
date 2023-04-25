@@ -1,0 +1,60 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install PHP and additional modules
+      apt:
+        name:
+          - php8.0
+          - php8.0-cli
+          - php8.0-fpm
+          - php8.0-common
+          - php8.0-json
+          - php8.0-mbstring
+          - php8.0-xml
+          - php8.0-zip
+        state: present
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Clone Git repository
+      git:
+        repo: https://github.com/Theohrt23/Kyks_pb_repo
+        dest: /var/www/kyks
+        version: main
+
+    - name: Configure Nginx
+      template:
+        src: ./templates/nginx.conf.j2
+        dest: /etc/nginx/sites-available/kyks
+      notify: restart nginx
+
+    - name: Enable Nginx site
+      file:
+        src: /etc/nginx/sites-available/kyks
+        dest: /etc/nginx/sites-enabled/kyks
+        state: link
+      notify: restart nginx
+
+    - name: Install Composer dependencies
+      composer:
+        command: install
+        working_dir: /var/www/kyks
+
+    - name: Configure Symfony parameters
+      template:
+        src: ./templates/parameters.yaml.j2
+        dest: /var/www/your-project/config/packages/parameters.yaml
+
+    - name: Clear Symfony cache
+      shell: php bin/console cache:clear --env=prod
+
+  handlers:
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
