@@ -121,19 +121,19 @@
     - name: Install Symfony dependencies with Composer
       ansible.builtin.command:
         cmd: composer install --no-interaction --optimize-autoloader
-        chdir: /var/www/kyks/app
+        chdir: /var/www/kyks/kyks
       environment:
         COMPOSER_ALLOW_SUPERUSER: 1
 
     - name: Configure Symfony parameters
       template:
         src: ./templates/parameters.yaml.j2
-        dest: /var/www/kyks/app/config/packages/parameters.yaml
+        dest: /var/www/kyks/kyks/config/packages/parameters.yaml
 
     - name: Run migrations
-      shell: php bin/console doctrine:migrations:migrate --no-interaction
+      shell: php bin/console doctrine:schema:update --force
       args:
-        chdir: /var/www/kyks/app
+        chdir: /var/www/kyks/kyks
 
   handlers:
     - name: restart nginx
