@@ -47,6 +47,18 @@
           - php8.2-zip
         state: present
 
+    - name: Add the MySQL APT repository
+      apt_repository:
+        repo: deb http://repo.mysql.com/apt/ubuntu/ focal mysql-8.0
+        state: present
+      become: yes
+
+    - name: Import the MySQL APT GPG key
+      apt_key:
+        url: https://repo.mysql.com/RPM-GPG-KEY-mysql-8.0
+        state: present
+      become: yes
+
     - name: Install MySQL Server and client
       apt:
         name:
