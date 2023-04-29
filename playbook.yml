@@ -47,6 +47,24 @@
           - php8.2-zip
         state: present
 
+    - name: Install repositories
+      apt:
+        name:
+          - ca-certificates
+          - apt-transport-https
+          - software-properties-common
+          - wget
+          - curl
+          - lsb-release
+          - git
+          - unzip
+          - zip
+          - python3
+          - python3-pip
+          - python3-pymysql
+        state: latest
+        update_cache: yes
+
     - name: Install MariaDB
       apt:
         name: mariadb-server
