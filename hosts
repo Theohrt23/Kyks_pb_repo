@@ -1,3 +1,2 @@
 [web]
 vm ansible_host=192.168.1.19 ansible_user=root ansible_password=theo2305 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-
