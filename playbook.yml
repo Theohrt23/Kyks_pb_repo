@@ -3,7 +3,7 @@
   become: true
 
   vars:
-    mysql_root_password: root
+    mysql_root_password: train
 
   tasks:
     - name: Install required dependencies for the Sury repository
@@ -47,37 +47,30 @@
           - php8.2-zip
         state: present
 
-    - name: Install MySQL 8.0 repository
-      apt_repository:
-        repo: "deb http://repo.mysql.com/apt/ubuntu/ bionic mysql-8.0"
-        state: present
-        update_cache: yes
-        keyserver: keyserver.ubuntu.com
-        key_id: "8C718D3B5072E1F5"
-
-    - name: Install MySQL 8.0 server
+    - name: Install MariaDB
       apt:
-        name: mysql-server-8.0
-        state: present
+        name: mariadb-server
+        state: latest
 
-    - name: Start MySQL Service
+    - name: Start MariaDB service
       service:
-        name: mysql
+        name: mariadb
+        enabled: true
         state: started
 
-    - name: Create MySQL user
+    - name: Create MariaDB user
       mysql_user:
-          check_implicit_admin: true
-          login_password: "{{ mysql_root_password }}"
-          login_unix_socket: /var/run/mysqld/mysqld.sock
-          name: root
-          password: "{{ mysql_root_password }}"
-          priv: "*.*:ALL"
-          state: present
+        check_implicit_admin: true
+        login_password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        name: dino
+        password: "{{ mysql_root_password }}"
+        priv: "*.*:ALL"
+        state: present
 
-    - name: Create MySQL database
+    - name: Create MariaDB database
       mysql_db:
-        login_user: symfony
+        login_user: dino
         login_password: "{{ mysql_root_password }}"
         name: kyks
         state: present
