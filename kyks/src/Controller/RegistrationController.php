@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,18 +44,7 @@ class RegistrationController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        return $this->json(['message' => 'Registered Successfully']);
+        return new JsonResponse('Registered Successfully', Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
-    #[Route('/book', name: 'book')]
-    public function prout(): Response
-    {
-        return $this->json([
-            'message' => 'welcome to your new controller!',
-            'path' => 'src/Controller/RegistrationController.php',
-        ]);
-    }
 }

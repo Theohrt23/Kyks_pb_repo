@@ -8,3 +8,8 @@ Symfony CLI
 
 - composer require
 - symfony server:start
+
+### Install with playbook
+
+Clone the github repositories on your server, change the ip in hosts by the ip of your server and change the root login and password for ssh connexion.
+And just run the cmd: ansible-playbook playbook.yml -i hosts

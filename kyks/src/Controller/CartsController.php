@@ -23,18 +23,16 @@ class CartsController extends AbstractController
     public function addProductToCart(int $productId, SerializerInterface $serializer, EntityManagerInterface $em, ProductsRepository $productRepository, CartsRepository $cartsRepository): JsonResponse
     {
 
-        // Get the authenticated user from the request
         $user = $this->getUser();
 
         if (!$user) {
-            return new JsonResponse('User not authenticated', Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Get the product with the given ID from the database
         $product = $productRepository->find($productId);
 
         if (!$product) {
-            return new JsonResponse('Product not found', Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Product not found'], Response::HTTP_NOT_FOUND);
         }
 
         $cart = $cartsRepository->findOneBy(['userId' => $user]);
@@ -45,48 +43,50 @@ class CartsController extends AbstractController
             $em->persist($cart);
         }
 
-        // Add the product to the user's cart
-        $cart->addProductId($product);
-        $em->flush();
+        try {
+            $cart->addProductId($product);
+            $em->flush();
 
-        // Return a success response
-        return new JsonResponse('Product added to cart');
+            return new JsonResponse('Product added to cart', Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Failed to add product'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     #[Route('/carts/{productId}', name:"deleteProductFromCart", methods: ['DELETE'])]
     public function deleteProductFromCart(int $productId, SerializerInterface $serializer, EntityManagerInterface $em, ProductsRepository $productRepository, CartsRepository $cartsRepository): JsonResponse
     {
-        // Get the authenticated user from the request
         $user = $this->getUser();
 
         if (!$user) {
-            return new JsonResponse('User not authenticated', Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
         $product = $productRepository->find($productId);
 
         if (!$product) {
-            return new JsonResponse('Product not found', Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Product not found'], Response::HTTP_NOT_FOUND);
         }
 
         $cart = $cartsRepository->findOneBy(['userId' => $user]);
 
         if (!$cart) {
-            return new JsonResponse('User cart not found', Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'User cart not found'], Response::HTTP_NOT_FOUND);
         }
 
         $products = $cart->getProductId();
 
         foreach($products as $s){
-            if(!($s->getId() == $productId)){
-                return new JsonResponse('Product '.$productId.' is not in the cart', Response::HTTP_OK);
+            if(($s->getId() == $productId)){
+                $cart->removeProductId($product);
+                $em->flush();
+
+                return new JsonResponse('Product removed from cart', Response::HTTP_OK);
             }
         }
 
-        $cart->removeProductId($product);
-        $em->flush();
-
-        return new JsonResponse('Product removed from cart');
+        return new JsonResponse(['error' => 'Product '.$productId.' is not in the cart'], Response::HTTP_OK);
     }
 
     #[Route('/carts', name:'getCartState', methods: ['GET'])]
@@ -96,13 +96,13 @@ class CartsController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            return new JsonResponse('User not authenticated', Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' =>  'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
         $cart = $cartsRepository->findOneBy(['userId' => $user]);
 
         if (!$cart) {
-            return new JsonResponse('Cart not found', Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Cart not found'], Response::HTTP_NOT_FOUND);
         }
 
         $productIds = $cart->getProductId();
@@ -114,18 +114,17 @@ class CartsController extends AbstractController
     #[Route('/carts/validate/', name: 'validate_cart', methods: ['POST'])]
     public function validateCart(EntityManagerInterface $em, CartsRepository $cartsRepository): JsonResponse
     {
-        // Get the authenticated user from the request
+
         $user = $this->getUser();
 
         if (!$user) {
-            return new JsonResponse('User not authenticated', Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Find the user's shopping cart in the database
         $cart = $cartsRepository->findOneBy(['userId' => $user]);
 
         if (!$cart) {
-            return new JsonResponse('User cart not found', Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'User cart not found'], Response::HTTP_NOT_FOUND);
         }
 
         // Calculate the total price of the products in the cart
@@ -146,14 +145,23 @@ class CartsController extends AbstractController
             $order->addProduct($product);
         }
 
+        if($order->getProducts()->isEmpty()){
+            return new JsonResponse(['error' => 'Cart is empty'], Response::HTTP_NOT_FOUND);
+        }
+
         // Remove the products from the cart
         $cart->getProductId()->clear();
 
-        // Persist the new order and updated cart in the database
-        $em->persist($order);
-        $em->persist($cart);
-        $em->flush();
+        try {
+            $em->persist($order);
+            $em->persist($cart);
+            $em->flush();
 
-        return new JsonResponse('Cart validated and converted to an order');
+            return new JsonResponse('Cart validated and converted to an order', Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Order not created'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

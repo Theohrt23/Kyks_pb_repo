@@ -49,15 +49,15 @@ class OrdersController extends AbstractController
             return new JsonResponse('User not authenticated', Response::HTTP_UNAUTHORIZED);
         }
 
-        $cart = $ordersRepository->findBy(['user_id' => $user]);
+        $orders = $ordersRepository->findBy(['user_id' => $user]);
 
-        if (!$cart) {
-            return new JsonResponse('Cart not found', Response::HTTP_NOT_FOUND);
+        if (!$orders) {
+            return new JsonResponse('Any order has been found', Response::HTTP_NOT_FOUND);
         }
 
-        $orders = [];
-        foreach ($cart as $order) {
-            $orders[] = [
+        $user_orders = [];
+        foreach ($orders as $order) {
+            $user_orders[] = [
                 'id' => $order->getId(),
                 'totalPrice' => $order->getTotalPrice(),
                 'creationDate' => $order->getCreationDate(),
@@ -65,7 +65,7 @@ class OrdersController extends AbstractController
             ];
         }
 
-        $jsonProductsList = $serializer->serialize($orders, 'json');
+        $jsonProductsList = $serializer->serialize($user_orders, 'json');
         return new JsonResponse($jsonProductsList, Response::HTTP_OK, [], true);
     }
 
