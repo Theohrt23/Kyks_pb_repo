@@ -128,7 +128,7 @@
     - name: Configure Symfony parameters
       template:
         src: ./templates/parameters.yaml.j2
-        dest: /var/www/app/kyks/config/packages/parameters.yaml
+        dest: /var/www/kyks/app/config/packages/parameters.yaml
 
     - name: Run migrations
       shell: php bin/console doctrine:migrations:migrate --no-interaction
