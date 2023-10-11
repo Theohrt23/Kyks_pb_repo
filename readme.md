@@ -1,3 +1,7 @@
+A simple project to learn how to use a playbook.
+
+------------------------------------------------
+
 php -S localhost:3000 -t public
 
 Php 8.2
