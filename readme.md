@@ -30,10 +30,10 @@ These prerequisites are essential for setting up an environment to run Ansible p
    - Run the cmd: ansible-playbook playbook.yml -i hosts
 
 2. **Explore Playbooks:**
-   - Navigate through the `playbooks` directory to discover various playbook examples.
+   - Navigate through the `playbook` file to discover playbook example.
 
 3. **Execute Playbooks:**
-   - Use the provided playbooks to perform tasks and see the results.
+   - Use the provided playbook to perform tasks and see the results.
 
 4. **Learn and Customize:**
    - Study the playbooks' structure and content to grasp Ansible syntax.
