@@ -96,7 +96,7 @@
 
     - name: Clone Git repository
       git:
-        repo: https://github.com/Theohrt23/Kyks_pb_repo
+        repo: https://github.com/theo-huret/playbook-deployment
         dest: /var/www/kyks
         version: main
 
